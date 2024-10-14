@@ -1,0 +1,1 @@
+Blog Project as a part of ALX Graduation Requirements
