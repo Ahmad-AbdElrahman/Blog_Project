@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
 const { get } = require('mongoose');
+
+
 // GET
 // HOME
 router.get('', async (req, res) => {

@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
+const User = require('../models/User');
 
+const adminLayout = '../views/layouts/admin';
 // GET
 // HOME
 router.get('/admin', async (req, res) => {
@@ -10,12 +12,26 @@ router.get('/admin', async (req, res) => {
             title: "Admin",
             description: "Simple Blog created with NodeJs, Express & MongoDb."
         }
+        res.render('admin/index', { locals, layout: adminLayout });
 
     } catch (error) {
         console.log(error);
     }
-    res.render('admin/index', { locals });
 });
+
+// POST
+// Admin - Check Login
+router.post('/admin', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        console.log(req.body);
+        res.redirect('/admin');
+
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 
 
 module.exports = router;
