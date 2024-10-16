@@ -7,7 +7,7 @@ const { get } = require('mongoose');
 router.get('', async (req, res) => {
     try {
         const locals = {
-            title: "NodeJs Blog",
+            title: "Thought Stream",
             description: "Simple Blog created with NodeJs, Express & MongoDb."
         }
 
