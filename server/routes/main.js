@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Post = require('../models/Post')
+const Post = require('../models/Post');
+const { get } = require('mongoose');
 // GET
 // HOME
 router.get('', async (req, res) => {
@@ -84,6 +85,8 @@ router.get('/about', (req, res) => {
     res.render("about");
 });
 
+// GET
+// POST :id
 router.get('/post/:id', async (req, res) => {
     try {
         let slug = req.params.id;
@@ -99,6 +102,32 @@ router.get('/post/:id', async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+});
+
+// POST
+// POST :searchTerm
+router.post('/search', async (req, res) => {
+    try {
+        const locals = {
+            title: "Search",
+            description: "Simple Blog Created with Node Js. Express and MongoDB"
+        }
+    let searchTerm = req.body.searchTerm
+    const searchNoSpeacialChar = searchTerm.replace(/[^a-zA-Z0-9 ]/g, "")
+
+    const data = await Post.find();
+    $or:[
+        { title: { $regex: new RegExp(searchNoSpeacialChar, 'i') } },
+        { body: { $regex: new RegExp(searchNoSpeacialChar, 'i') } }
+    ]
+    res.render("search", {
+        data,
+        locals
+    });
+    } catch {
+        console.log(error);
+    }
+
 });
 
 module.exports = router;
