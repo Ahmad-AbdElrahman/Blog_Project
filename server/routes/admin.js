@@ -120,20 +120,22 @@ router.get('/add-post', authMiddleware, async (req, res) => {
 router.post('/add-post', authMiddleware, async (req, res) => {
     
     try {
-        console.log(req.body);
 
-        res.redirect('/dahsboard');
+        try {
+            const newPost = new Post({
+                title: req.body.title,
+                body: req.body.body,
+            });
 
-        const data = await Post.find();
-        res.render('admin/add-post', {
-            locals,
-            layout: adminLayout
-        });
+            await Post.create(newPost)
+            res.redirect('/dashboard');
+        } catch (error) {
+            console.log(error);
+        }
 
     } catch (error) {
         console.log(error);
     }
-
 });
 
 // POST
