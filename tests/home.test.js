@@ -1,10 +1,10 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../app'); // Import your Express app
-const Post = require('../models/Post');
+const Post = require('../server/models/Post');
 
 beforeAll(async () => {
-  await mongoose.connect('mongodb://localhost:27017/testDB', { useNewUrlParser: true });
+  await mongoose.connect(process.env.MONGODB_URI_TEST, { useNewUrlParser: true });
 });
 
 afterAll(async () => {

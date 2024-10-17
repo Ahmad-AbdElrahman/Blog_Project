@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const Post = require('../models/Post'); // Adjust path as necessary
+const Post = require('../server/models/Post');
 
 beforeAll(async () => {
-  await mongoose.connect('mongodb://localhost:27017/testDB', { useNewUrlParser: true });
+  await mongoose.connect(process.env.MONGODB_URI_TEST, { useNewUrlParser: true });
 });
 
 afterAll(async () => {
