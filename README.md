@@ -1,14 +1,14 @@
 
 # Thought Stream
 
-This blog platform allows users to create, edit, and delete blog posts. The platform supports authentication.
+This blog platform allows users to create, edit, and delete blog posts. This platform supports authentication.
 
 ## Tech Stack
 
 - **Backend**: Node.js (with Express)
 - **Database**: MongoDB (using Mongoose)
 - **Authentication**: JWT (JSON Web Tokens)
-- **Optional Frontend**: EJS for templating
+- **Frontend**: EJS for templating
 
 ## Setup Instructions
 
