@@ -127,7 +127,7 @@ To run the tests, use the following command:
 
 The tests cover user authentication, post management, and the home page functionality.
 
-## Usage Guidelines
+## Usage
 
 - **Authentication**: Register and log in to create and manage your blog posts.
 - **Creating Posts**: Once logged in, navigate to the "Create Post" page to add a new blog post.

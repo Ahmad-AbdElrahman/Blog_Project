@@ -35,7 +35,7 @@ router.get('/admin', async (req, res) => {
             title: "Admin",
             description: "Simple Blog created with NodeJs, Express & MongoDb."
         }
-        res.render('admin/index', { locals, layout: adminLayout });
+        res.render('admin/index', { locals, layout: adminLayout, currentRoute: '/admin' });
 
     } catch (error) {
         console.log(error);
@@ -84,7 +84,7 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
         res.render('admin/dashboard', {
             locals,
             data,
-            layout: adminLayout
+            layout: adminLayout,
         });
 
     } catch (error) {
@@ -173,7 +173,7 @@ router.put('/edit-post/:id', authMiddleware, async (req, res) => {
             updatedAt: Date.now()
         });
 
-        res.redirect(`/edit-post/${req.params.id}`);
+        res.redirect('/dashboard');
 
     } catch (error) {
         console.log(error);
@@ -194,6 +194,20 @@ router.delete('/delete-post/:id', authMiddleware, async (req, res) => {
 
 })
 
+// GET
+// Admin - Register
+router.get('/register', async (req, res) => {
+    try {
+        const locals = {
+            title: "Admin",
+            description: "Simple Blog created with NodeJs, Express & MongoDb."
+        }
+        res.render('admin/register', { locals, layout: adminLayout, currentRoute: '/admin' });
+
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 // POST
 // Admin - Register
@@ -204,7 +218,7 @@ router.post('/register', async (req, res) => {
 
         try {
             const user = await User.create({ username, password:hashedPassword });
-            res.status(201).json({ message: 'User Created', user });
+            res.status(201).redirect('/admin');
         } catch (error) {
             if(error.code === 11000) {
                 res.status(409).json({ message: 'User Already in use' });
