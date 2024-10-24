@@ -1,14 +1,5 @@
-const mongoose = require('mongoose');
 const Post = require('../server/models/Post');
 
-beforeAll(async () => {
-  await mongoose.connect(process.env.MONGODB_URI_TEST, { useNewUrlParser: true });
-});
-
-afterAll(async () => {
-  await Post.deleteMany({});
-  await mongoose.connection.close();
-});
 
 describe('Post Model', () => {
   it('should create a post successfully', async () => {

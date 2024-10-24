@@ -1,16 +1,7 @@
 const request = require('supertest');
-const mongoose = require('mongoose');
 const app = require('../app'); // Import your Express app
 const Post = require('../server/models/Post');
 
-beforeAll(async () => {
-  await mongoose.connect(process.env.MONGODB_URI_TEST, { useNewUrlParser: true });
-});
-
-afterAll(async () => {
-  await Post.deleteMany({});
-  await mongoose.connection.close();
-});
 
 describe('Home Page and Post Routes', () => {
   it('should display the home page with paginated posts', async () => {
