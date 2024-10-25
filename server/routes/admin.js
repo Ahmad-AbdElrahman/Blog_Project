@@ -102,7 +102,7 @@ router.get('/add-post', authMiddleware, async (req, res) => {
     try {
         const locals = {
             title: "Add Post",
-            description: "Getting Posts"
+            description: "Renders the form to create a new post."
         }
 
         const data = await Post.find();

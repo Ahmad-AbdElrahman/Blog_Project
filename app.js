@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const path = require('path');
 const express = require("express");
 const expressLayout = require('express-ejs-layouts');
 const methodOverride = require('method-override')
@@ -42,6 +43,10 @@ app.locals.isActiveRoute = isActiveRoute;
 app.use('/', require('./server/routes/main'));
 app.use('/', require('./server/routes/admin'));
 
+
+app.get('/docs', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/docs/api-docs.html'));
+});
 
 // app.listen(PORT, () => {
 //     console.log(`App listening on port ${PORT}`)

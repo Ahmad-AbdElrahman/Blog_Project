@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation for Blog Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">API Documentation for Blog Platform</h1>
+
+        <h2>User Authentication Routes</h2>
+
+        <h3>1. GET /admin</h3>
+        <p><strong>Description:</strong> Renders the Admin login page.</p>
+        <p><strong>Response:</strong> <code>200 OK</code> - Renders the <code>admin/index</code> view with locals object containing title and description.</p>
+        <h4>Example Request:</h4>
+        <pre>GET /admin</pre>
+
+        <h3>2. POST /admin</h3>
+        <p><strong>Description:</strong> Handles the login of an admin user and generates a JWT.</p>
+        <h4>Request Body:</h4>
+        <pre>
+{
+    "username": "your-username",
+    "password": "your-password"
+}
+        </pre>
+        <p><strong>Response:</strong>
+            <ul>
+                <li><code>302 Found:</code> Redirects to <code>/dashboard</code> if login is successful, with a token set in a cookie.</li>
+                <li><code>401 Unauthorized:</code> If credentials are invalid.</li>
+            </ul>
+        </p>
+        <h4>Example Request:</h4>
+        <pre>
+POST /admin
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=adminpassword
+        </pre>
+
+        <h3>3. GET /dashboard</h3>
+        <p><strong>Description:</strong> Renders the Admin dashboard, displaying all posts.</p>
+        <p><strong>Response:</strong> <code>200 OK</code> - Renders the <code>admin/dashboard</code> view with all posts.</p>
+        <h4>Example Request:</h4>
+        <pre>GET /dashboard</pre>
+
+        <h3>4. GET /logout</h3>
+        <p><strong>Description:</strong> Logs out the admin user by clearing the token.</p>
+        <p><strong>Response:</strong> <code>302 Found</code> - Redirects to the home page.</p>
+        <h4>Example Request:</h4>
+        <pre>GET /logout</pre>
+
+        <h2>Post Management Routes</h2>
+
+        <h3>1. GET /add-post</h3>
+        <p><strong>Description:</strong> Renders the form to create a new post.</p>
+        <p><strong>Response:</strong> <code>200 OK</code> - Renders the <code>admin/add-post</code> view.</p>
+        <h4>Example Request:</h4>
+        <pre>GET /add-post</pre>
+
+        <h3>2. POST /add-post</h3>
+        <p><strong>Description:</strong> Creates a new post.</p>
+        <h4>Request Body:</h4>
+        <pre>
+{
+    "title": "Post Title",
+    "body": "Body content of the post."
+}
+        </pre>
+        <p><strong>Response:</strong>
+            <ul>
+                <li><code>302 Found:</code> Redirects to <code>/dashboard</code> upon successful post creation.</li>
+                <li><code>500 Internal Server Error:</code> If an error occurs during creation.</li>
+            </ul>
+        </p>
+        <h4>Example Request:</h4>
+        <pre>
+POST /add-post
+Content-Type: application/x-www-form-urlencoded
+
+title=My New Post&body=This is the body of my new post.
+        </pre>
+
+        <h3>3. GET /edit-post/:id</h3>
+        <p><strong>Description:</strong> Renders the form to edit a specific post.</p>
+        <h4>URL Parameters:</h4>
+        <pre>id: The ID of the post to be edited.</pre>
+        <p><strong>Response:</strong> <code>200 OK</code> - Renders the <code>admin/edit-post</code> view with post data.</p>
+        <h4>Example Request:</h4>
+        <pre>GET /edit-post/60c72b2f9b1e4e3f844f4b0e</pre>
+
+        <h3>4. PUT /edit-post/:id</h3>
+        <p><strong>Description:</strong> Updates an existing post.</p>
+        <h4>URL Parameters:</h4>
+        <pre>id: The ID of the post to be updated.</pre>
+        <h4>Request Body:</h4>
+        <pre>
+{
+    "title": "Updated Title",
+    "body": "Updated body content."
+}
+        </pre>
+        <p><strong>Response:</strong>
+            <ul>
+                <li><code>302 Found:</code> Redirects to <code>/dashboard</code> upon successful update.</li>
+                <li><code>500 Internal Server Error:</code> If an error occurs during update.</li>
+            </ul>
+        </p>
+        <h4>Example Request:</h4>
+        <pre>
+PUT /edit-post/60c72b2f9b1e4e3f844f4b0e
+Content-Type: application/x-www-form-urlencoded
+
+title=Updated Post Title&body=Updated body content.
+        </pre>
+
+        <h3>5. DELETE /delete-post/:id</h3>
+        <p><strong>Description:</strong> Deletes a specific post.</p>
+        <h4>URL Parameters:</h4>
+        <pre>id: The ID of the post to be deleted.</pre>
+        <p><strong>Response:</strong>
+            <ul>
+                <li><code>302 Found:</code> Redirects to <code>/dashboard</code> upon successful deletion.</li>
+                <li><code>500 Internal Server Error:</code> If an error occurs during deletion.</li>
+            </ul>
+        </p>
+        <h4>Example Request:</h4>
+        <pre>DELETE /delete-post/60c72b2f9b1e4e3f844f4b0e</pre>
+
+        <h3>6. GET /register</h3>
+        <p><strong>Description:</strong> Renders the registration form for admin users.</p>
+        <p><strong>Response:</strong> <code>200 OK</code> - Renders the <code>admin/register</code> view.</p>
+        <h4>Example Request:</h4>
+        <pre>GET /register</pre>
+
+        <h3>7. POST /register</h3>
+        <p><strong>Description:</strong> Handles the registration of a new admin user.</p>
+        <h4>Request Body:</h4>
+        <pre>
+{
+    "username": "desired-username",
+    "password": "desired-password"
+}
+        </pre>
+        <p><strong>Response:</strong>
+            <ul>
+                <li><code>201 Created:</code> Redirects to <code>/admin</code> upon successful registration.</li>
+                <li><code>409 Conflict:</code> If the username is already in use.</li>
+                <li><code>500 Internal Server Error:</code> If another error occurs during registration.</li>
+            </ul>
+        </p>
+        <h4>Example Request:</h4>
+        <pre>
+POST /register
+Content-Type: application/x-www-form-urlencoded
+
+username=newadmin&password=newpassword
+        </pre>
+
+        <h2>Middleware</h2>
+        <h3>authMiddleware</h3>
+        <p><strong>Description:</strong> This middleware checks if the admin user is authenticated by verifying the JWT token in the cookies.</p>
+        <p><strong>Response:</strong>
+            <ul>
+                <li><code>401 Unauthorized:</code> If the token is not present or invalid.</li>
+            </ul>
+        </p>
+
+        <h2>Error Handling</h2>
+        <p>For all endpoints, if an error occurs, a <code>500 Internal Server Error</code> response is sent with a generic error message. Specific error messages are logged in the console.</p>
+
+        <h2>Base URL</h2>
+        <p><code>http://&lt;your-server-url&gt;/</code></p>
+
+    </div>
+</body>
+</html>
+``
