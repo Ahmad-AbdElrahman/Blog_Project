@@ -1,0 +1,152 @@
+openapi: 3.0.0
+info:
+  title: Blog Platform API
+  version: 1.0.0
+  description: API for managing posts and user authentication in a blog platform.
+
+servers:
+  - url: http://<your-server-url>
+
+paths:
+  /admin:
+    get:
+      summary: Renders the Admin login page.
+      responses:
+        '200':
+          description: Successful response rendering the login page.
+    post:
+      summary: Handles the login of an admin user and generates a JWT.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '302':
+          description: Redirects to /dashboard upon successful login.
+        '401':
+          description: Invalid credentials.
+
+  /dashboard:
+    get:
+      summary: Renders the Admin dashboard, displaying all posts.
+      responses:
+        '200':
+          description: Successful response rendering the dashboard.
+
+  /add-post:
+    get:
+      summary: Renders the form to create a new post.
+      responses:
+        '200':
+          description: Successful response rendering the add post form.
+    post:
+      summary: Creates a new post.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+      responses:
+        '302':
+          description: Redirects to /dashboard upon successful post creation.
+        '500':
+          description: Error creating post.
+
+  /edit-post/{id}:
+    get:
+      summary: Renders the form to edit a specific post.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response rendering the edit post form.
+    put:
+      summary: Updates an existing post.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+      responses:
+        '302':
+          description: Redirects to /dashboard upon successful update.
+        '500':
+          description: Error updating post.
+
+  /delete-post/{id}:
+    delete:
+      summary: Deletes a specific post.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirects to /dashboard upon successful deletion.
+        '500':
+          description: Error deleting post.
+
+  /register:
+    get:
+      summary: Renders the registration form for admin users.
+      responses:
+        '200':
+          description: Successful response rendering the registration form.
+    post:
+      summary: Handles the registration of a new admin user.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Redirects to /admin upon successful registration.
+        '409':
+          description: Username already in use.
+        '500':
+          description: Internal server error.
+
+  /logout:
+    get:
+      summary: Logs out the admin user by clearing the token.
+      responses:
+        '302':
+          description: Redirects to the home page.

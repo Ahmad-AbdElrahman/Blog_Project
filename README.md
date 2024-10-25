@@ -17,11 +17,13 @@
 
 - [Project Structure](#project-structure)
 
-- [Installation](#installation)
+- [Setup Instructions](#Setup-Instructions)
+
+- [Testing](#testing)
 
 - [Usage](#usage)
 
-- [Testing](#testing)
+- [API Documentation](#API-Documentation)
 
 - [Contributing](#contributing)
 
@@ -132,6 +134,16 @@ The tests cover user authentication, post management, and the home page function
 - **Authentication**: Register and log in to create and manage your blog posts.
 - **Creating Posts**: Once logged in, navigate to the "Create Post" page to add a new blog post.
 - **Editing/Deleting Posts**: From your profile or the post page, you can edit or delete posts you have authored.
+
+## API Documentation
+
+The `API.yaml` file in this repository contains the complete documentation for the backend.
+
+For a rendered version of the Swagger documentation, visit:
+
+`http://<server-url>/docs`
+
+This endpoint serves the documentation in a user-friendly format.
 
 ## Contributing
 
