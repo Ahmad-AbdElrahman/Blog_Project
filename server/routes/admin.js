@@ -32,8 +32,8 @@ const authMiddleware = (req, res, next) => {
 router.get('/admin', async (req, res) => {
     try {
         const locals = {
-            title: "Admin",
-            description: "Simple Blog created with NodeJs, Express & MongoDb."
+            title: "Admin Login",
+            description: "Login to the admin dashboard."
         }
         res.render('admin/index', { locals, layout: adminLayout, currentRoute: '/admin' });
 
@@ -43,7 +43,7 @@ router.get('/admin', async (req, res) => {
 });
 
 // POST
-// Admin - Check Login
+// Admin - Check Login - Handle login and generate JWT
 router.post('/admin', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -67,17 +67,18 @@ router.post('/admin', async (req, res) => {
 
     } catch (error) {
         console.log(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
 // GET
-// Admin - Dashboard
+// Admin - Dashboard - Render dashboard
 router.get('/dashboard', authMiddleware, async (req, res) => {
     
     try {
         const locals = {
-            title: "Admin",
-            description: "Simple Blog created with NodeJs, Express & MongoDb."
+            title: "Admin Dashboard",
+            description: "Welcome to your admin dashboard."
         }
 
         const data = await Post.find();
@@ -89,6 +90,7 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
 
     } catch (error) {
         console.log(error);
+        res.status(500).send('Server error');
     }
 
 });
@@ -100,7 +102,7 @@ router.get('/add-post', authMiddleware, async (req, res) => {
     try {
         const locals = {
             title: "Add Post",
-            description: "Simple Blog created with NodeJs, Express & MongoDb."
+            description: "Getting Posts"
         }
 
         const data = await Post.find();
@@ -128,13 +130,14 @@ router.post('/add-post', authMiddleware, async (req, res) => {
             });
 
             await Post.create(newPost)
-            res.redirect('/dashboard');
+            res.redirect('/dashboard'); // Redirect to dashboard after successful post creation
         } catch (error) {
             console.log(error);
         }
 
     } catch (error) {
         console.log(error);
+        res.status(500).json({ message: 'Error creating post' });
     }
 });
 
@@ -145,7 +148,7 @@ router.get('/edit-post/:id', authMiddleware, async (req, res) => {
     try {
             const locals = {
                 title: "Edit Post",
-                description: "Simple Blog created with NodeJs, Express & MongoDb."
+                description: "Edit your posts"
             }
 
             const data = await Post.findOne({ _id: req.params.id });
@@ -195,12 +198,12 @@ router.delete('/delete-post/:id', authMiddleware, async (req, res) => {
 })
 
 // GET
-// Admin - Register
+// Admin - Register - Render the registration form
 router.get('/register', async (req, res) => {
     try {
         const locals = {
             title: "Admin",
-            description: "Simple Blog created with NodeJs, Express & MongoDb."
+            description: "Register as an admin."
         }
         res.render('admin/register', { locals, layout: adminLayout, currentRoute: '/admin' });
 
@@ -210,7 +213,7 @@ router.get('/register', async (req, res) => {
 });
 
 // POST
-// Admin - Register
+// Admin - Register - Handle registration
 router.post('/register', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -218,7 +221,7 @@ router.post('/register', async (req, res) => {
 
         try {
             const user = await User.create({ username, password:hashedPassword });
-            res.status(201).redirect('/admin');
+            res.status(201).redirect('/admin'); // Redirect to admin page upon successful registration
         } catch (error) {
             if(error.code === 11000) {
                 res.status(409).json({ message: 'User Already in use' });
@@ -232,7 +235,7 @@ router.post('/register', async (req, res) => {
 });
 
 // GET
-// Admin - Logout
+// Admin - Logout (clear the token)
 router.get('/logout', (req, res) => {
     res.clearCookie('token');
     res.redirect('/');

@@ -5,4 +5,4 @@ const server = app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
 
-module.exports = server; // Export the server for potential cleanup in tests
+module.exports = server; 

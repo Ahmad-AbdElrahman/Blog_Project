@@ -16,11 +16,13 @@ router.get('', async (req, res) => {
     let perPage = 10;
     let page = req.query.page || 1;
 
+    // Fetch posts with pagination
     const data = await Post.aggregate([ { $sort: { createdAt: -1 } } ])
     .skip(perPage * page - perPage)
     .limit(perPage)
     .exec();
 
+    // Count total documents
     const count = await Post.countDocuments({});
     const nextPage = parseInt(page) + 1;
     const hasNextPage = nextPage <= Math.ceil(count / perPage);
@@ -46,31 +48,42 @@ router.get('/about', (req, res) => {
 });
 
 // GET
-// POST :id
+// View a specific post by ID
 router.get('/post/:id', async (req, res) => {
     try {
         let slug = req.params.id;
+
+        // Check if valid ObjectId before querying
+        const isValidObjectId = slug.match(/^[0-9a-fA-F]{24}$/);
+        if (!isValidObjectId) {
+            return res.status(404).render('404', { message: "Post not found" });
+        }
     
-        const data = await Post.findById({ _id: slug });
-        
+        // Find post by ID
+        const data = await Post.findById(slug);
+        if (!data) {
+            return res.status(404).render('404', { message: "Post not found" });
+        }
+
         const locals = {
             title: data.title,
-            description: "Simple Blog Created with Node Js. Express and MongoDB",
+            description: "Describing Posts",
         }
 
         res.render('post', { locals, data, currentRoute: `/post/${slug}` });
     } catch (error) {
-        console.log(error);
+        console.error("Error in GET /post/:id:", error);
+        res.status(500).send('Server Error');
     }
 });
 
 // POST
-// POST :searchTerm
+// Search posts by term
 router.post('/search', async (req, res) => {
     try {
         const locals = {
             title: "Search",
-            description: "Simple Blog Created with Node Js. Express and MongoDB"
+            description: "Searching Posts"
         }
     let searchTerm = req.body.searchTerm
     const searchNoSpeacialChar = searchTerm.replace(/[^a-zA-Z0-9 ]/g, "")
@@ -87,7 +100,8 @@ router.post('/search', async (req, res) => {
         currentRoute: '/'
     });
     } catch(error) {
-        console.log(error);
+        console.error("Error in POST /search:", error);
+        res.status(500).send('Server Error');
     }
 
 });
