@@ -115,7 +115,7 @@
 
 4. Start the server:
    ```bash
-   npm start
+   npm run start
    ```
 
    The application will be running at `http://localhost:5000`.
@@ -123,9 +123,9 @@
 ## Testing
 
 To run the tests, use the following command:
-    ```bash
-    npm test
-    ```
+   ```bash
+    npm run test
+   ```
 
 The tests cover user authentication, post management, and the home page functionality.
 
