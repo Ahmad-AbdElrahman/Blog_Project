@@ -139,7 +139,7 @@ The tests cover user authentication, post management, and the home page function
 
 The `API.yaml` file in this repository contains the complete documentation for the backend.
 
-For a rendered version of the Swagger documentation, visit:
+For a rendered version of the documentation, visit:
 
 `http://<server-url>/docs`
 
