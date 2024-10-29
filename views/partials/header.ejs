@@ -4,23 +4,31 @@
     <nav class="header__nav">
         <ul>
             <li>
-                <a href="/" class="<%= isActiveRoute('/', currentRoute) %>">Home</a>
+                <a href="/" class="">Home</a>
             </li>
             <li>
-                <a href="/about" class="<%= isActiveRoute('/about', currentRoute) %>">About</a>
+                <a href="/about" class="">About</a>
             </li>
             <li>
-                <a href="/contact" class="<%= isActiveRoute('/contact', currentRoute) %>">Contact</a>
+                <a href="/contact" class="">Contact</a>
             </li>
             <li>
-                <a href="/admin" class="<%= isActiveRoute('/admin', currentRoute) %>">Login</a>
+                <% if (isAuthenticated) { %>
+                    <a href="/logout">Logout</a>
+                <% } else { %>
+                    <a href="/admin">Login</a>
+                <% } %>
             </li>
             <li>
-                <a href="/register" class="<%= isActiveRoute('/register', currentRoute) %>">Register</a>
+                <a href="/register" class="">Register</a>
             </li>
         </ul>
     </nav>
 
+    <div>
+
+    </div>
+    
     <div class="header__button">
         <button class="searchBtn" aria-expanded="false">
             search

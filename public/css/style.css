@@ -59,7 +59,7 @@ textarea {
 }
 
 
-img {
+#hero-image {
   width: 100%;
   height: auto;
 }
@@ -255,6 +255,7 @@ img {
 
 .article {
   white-space: pre-wrap;
+  font-size: 24px;
 }
 
 
@@ -339,4 +340,10 @@ img {
 
 .pagination:hover {
   color: var(--black);
+}
+
+#contact .li {
+  flex: auto;
+  text-align: center;
+  
 }

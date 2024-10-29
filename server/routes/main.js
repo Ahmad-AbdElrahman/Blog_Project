@@ -2,7 +2,13 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
 const { get } = require('mongoose');
+const jwt = require('jsonwebtoken');
 
+const authMiddleware = (req, res, next) => {
+    const token = req.cookies.token;
+    req.isAuthenticated = !!token;
+    next();
+};
 
 // GET
 // HOME
@@ -32,19 +38,25 @@ router.get('', async (req, res) => {
         data,
         current: page,
         nextPage: hasNextPage ? nextPage : null,
-        currentRoute: '/'
+        currentRoute: '/',
+        isAuthenticated: req.isAuthenticated,
     });
 
     } catch (error) {
         console.log(error)
     }
-
 });
 
 // GET
 // About
 router.get('/about', (req, res) => {
-    res.render("about", {currentRoute: '/about'} );
+    res.render("about", {currentRoute: '/about', isAuthenticated: req.isAuthenticated} );
+});
+
+// GET
+// Contact
+router.get('/contact', (req, res) => {
+    res.render("contact", {currentRoute: '/contact', isAuthenticated: req.isAuthenticated} );
 });
 
 // GET
@@ -70,7 +82,7 @@ router.get('/post/:id', async (req, res) => {
             description: "Describing Posts",
         }
 
-        res.render('post', { locals, data, currentRoute: `/post/${slug}` });
+        res.render('post', { locals, data, currentRoute: `/post/${slug}`, isAuthenticated: req.isAuthenticated });
     } catch (error) {
         console.error("Error in GET /post/:id:", error);
         res.status(500).send('Server Error');

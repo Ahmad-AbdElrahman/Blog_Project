@@ -124,7 +124,7 @@
 
 To run the tests, use the following command:
    ```bash
-    npm run test
+   npm run test
    ```
 
 The tests cover user authentication, post management, and the home page functionality.

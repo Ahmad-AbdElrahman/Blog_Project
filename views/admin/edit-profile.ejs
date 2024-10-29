@@ -1,0 +1,20 @@
+<h2><%= user.profile.firstName %> <%= user.profile.lastName %> Profile</h2>
+<img src="<%= user.profile.avatarUrl %>" alt="Profile Picture" width="150" height="150">
+<form action="/profile?_method=PUT" method="POST" enctype="multipart/form-data">
+    <label for="email"><b>Email</b></label>
+    <input type="email" name="email" value="<%= user.email %>" required>
+
+    <label for="firstName"><b>First Name</b></label>
+    <input type="text" name="firstName" value="<%= user.profile.firstName %>">
+
+    <label for="lastName"><b>Last Name</b></label>
+    <input type="text" name="lastName" value="<%= user.profile.lastName %>">
+
+    <label for="bio"><b>Bio</b></label>
+    <textarea name="bio"><%= user.profile.bio %></textarea>
+
+    <label for="profilePicture"><b>Profile Picture</b></label>
+    <input type="file" name="profilePicture">
+
+    <button type="submit" class="btn">Save</button>
+</form>

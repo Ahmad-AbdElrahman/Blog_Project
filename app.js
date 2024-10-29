@@ -7,6 +7,7 @@ const methodOverride = require('method-override')
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const jwt = require('jsonwebtoken');
 
 const connectDB = require('./server/config/db');
 const { isActiveRoute } = require('./server/helpers/routeHelpers');
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(methodOverride('_method'));
+app.use('/uploads', express.static('uploads'));
 
 app.use(session({
     secret: 'keyboard cat',
@@ -48,8 +50,5 @@ app.get('/docs', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/docs/api-docs.html'));
 });
 
-// app.listen(PORT, () => {
-//     console.log(`App listening on port ${PORT}`)
-// });
 
 module.exports = app;

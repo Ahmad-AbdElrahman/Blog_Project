@@ -1,0 +1,8 @@
+<h2><%= user.profile.firstName %> <%= user.profile.lastName %>'s Profile</h2>
+<img src="<%= user.profile.avatarUrl %>" alt="Profile Picture" width="150" height="150">
+<h3>Email: <b><%= user.email %></b></h3>
+<h3>First Name: <%= user.profile.firstName %></h3>
+<h3>Last Name: <%= user.profile.lastName %></h3>
+<h3>Bio: <%= user.profile.bio %></h3>
+<br><br>
+<a href="/profile/edit" class="btn">Edit Profile</a>

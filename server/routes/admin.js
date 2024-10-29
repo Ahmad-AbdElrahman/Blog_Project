@@ -3,7 +3,8 @@ const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const upload = require('../middleware/upload');
 
 
 const adminLayout = '../views/layouts/admin';
@@ -216,11 +217,16 @@ router.get('/register', async (req, res) => {
 // Admin - Register - Handle registration
 router.post('/register', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, email, firstName, lastName, bio } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
 
         try {
-            const user = await User.create({ username, password:hashedPassword });
+            const user = await User.create({
+                username,
+                password: hashedPassword,
+                email,
+                profile: { firstName, lastName, bio }
+            });
             res.status(201).redirect('/admin'); // Redirect to admin page upon successful registration
         } catch (error) {
             if(error.code === 11000) {
@@ -239,6 +245,60 @@ router.post('/register', async (req, res) => {
 router.get('/logout', (req, res) => {
     res.clearCookie('token');
     res.redirect('/');
+});
+
+// GET
+// Profile - Display user profile
+router.get('/profile', authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.userId);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        const locals = {
+            title: "Your Profile",
+            description: "View and edit your profile."
+        };
+
+        res.render('admin/profile', { locals, user, layout: adminLayout });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// GET - Display edit profile page
+router.get('/profile/edit', authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.userId);
+        res.render('admin/edit-profile', { user });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Server error');
+    }
+});
+
+// PUT - Update profile
+router.put('/profile', authMiddleware, upload.single('profilePicture'), async (req, res) => {
+    try {
+        const { email, firstName, lastName, bio } = req.body;
+        const profilePicture = req.file ? req.file.path : null;
+
+        const updateData = {
+            email,
+            profile: {
+                firstName,
+                lastName,
+                bio,
+                avatarUrl: profilePicture || undefined
+            }
+        };
+
+        await User.findByIdAndUpdate(req.userId, updateData, { new: true });
+        res.redirect('/profile'); // Redirect back to profile page after updating
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error updating profile');
+    }
 });
 
 module.exports = router;
