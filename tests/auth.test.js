@@ -14,47 +14,50 @@ describe('User Authentication', () => {
       .post('/register')
       .send({
         username: 'testuser',
-        password: 'password123'
+        password: 'password123', // min length of 8
+        email: 'testuser@example.com' // valid email format
       });
-    expect(res.statusCode).toEqual(302); 
-    // expect(res.body).toHaveProperty('message', 'User Created'); // Uncommented to validate response
+    expect(res.statusCode).toEqual(302); // Assuming redirect after successful registration
   });
 
-  it('should not register a duplicate user', async () => {
+  it('should not register a user with an existing username or email', async () => {
     await request(app)
       .post('/register')
       .send({
         username: 'testuser',
-        password: 'password123'
+        password: 'password123',
+        email: 'testuser@example.com'
       });
 
     const res = await request(app)
       .post('/register')
       .send({
-        username: 'testuser',
-        password: 'password123'
+        username: 'testuser', // duplicate username
+        password: 'password123',
+        email: 'testuser@example.com' // duplicate email
       });
-    expect(res.statusCode).toEqual(409);
+    expect(res.statusCode).toEqual(409); // Conflict error for duplicate entries
     expect(res.body).toHaveProperty('message', 'User Already in use');
   });
 
   it('should login a registered user', async () => {
-    // Register the user first to ensure they exist
+    // Register user first
     await request(app)
       .post('/register')
       .send({
         username: 'testuser',
-        password: 'password123'
+        password: 'password123',
+        email: 'testuser@example.com'
       });
 
     const res = await request(app)
       .post('/admin')
       .send({
         username: 'testuser',
-        password: 'password123' // Use plain password for login
+        password: 'password123' // plain password for login
       });
-    expect(res.statusCode).toEqual(302); // Redirect to dashboard
-    expect(res.headers['set-cookie'][0]).toMatch(/token=/); // Check if token is set
+    expect(res.statusCode).toEqual(302); // Redirect to dashboard after login
+    expect(res.headers['set-cookie'][0]).toMatch(/token=/); // Check for token cookie
   });
 
   it('should not login with invalid credentials', async () => {
@@ -73,10 +76,11 @@ describe('User Authentication', () => {
       .post('/register')
       .send({
         username: 'testuser',
-        password: 'password123'
+        password: 'password123',
+        email: 'testuser@example.com'
       });
 
-    // Log in the user to set the cookie
+    // Log in the user
     await request(app)
       .post('/admin')
       .send({

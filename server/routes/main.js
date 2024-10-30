@@ -109,7 +109,8 @@ router.post('/search', async (req, res) => {
     res.render("search", {
         data,
         locals,
-        currentRoute: '/'
+        currentRoute: '/',
+        isAuthenticated: req.isAuthenticated
     });
     } catch(error) {
         console.error("Error in POST /search:", error);
